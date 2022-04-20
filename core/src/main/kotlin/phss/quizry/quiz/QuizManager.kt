@@ -1,5 +1,7 @@
 package phss.quizry.quiz
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import phss.quizry.database.DatabaseManager
@@ -13,6 +15,21 @@ class QuizManager(
     fun loadQuizzes(): List<Quiz>  = transaction {
         SchemaUtils.create(Quizzes)
         Quiz.all().toList()
+    }
+
+    fun createQuiz(category: String, creator: String, title: String, description: String, questions: List<Quiz.QuizQuestion>, answers: List<Quiz.QuizAnswer>) = transaction {
+        Quiz.new {
+            this.category = category
+            this.creator = creator
+            this.title = title
+            this.description = description
+            this.questions = Json.encodeToString(questions)
+            this.answers = Json.encodeToString(answers)
+        }
+    }
+
+    fun deleteQuiz(quizId: Int) {
+        Quiz.findById(quizId)?.delete()
     }
 
 }

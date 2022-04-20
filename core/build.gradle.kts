@@ -1,6 +1,7 @@
 plugins {
     java
     kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 dependencies {
@@ -13,5 +14,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:0.37.3")
     implementation("org.jetbrains.exposed:exposed-jdbc:0.37.3")
     implementation("org.json:json:20211205")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     testImplementation("junit", "junit", "4.12")
 }
