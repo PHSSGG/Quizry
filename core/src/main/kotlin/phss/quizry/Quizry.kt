@@ -5,11 +5,15 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import phss.quizry.config.provider.impl.DatabaseConfig
 import phss.quizry.database.DatabaseManager
+import phss.quizry.quiz.QuizManager
+import phss.quizry.quiz.data.domain.Quiz
 
 fun main() {
-    val databaseManager = DatabaseManager(DatabaseConfig().get()).connect()
+    val databaseManager = DatabaseManager(DatabaseConfig().get()).also { it.connect() }
+    val quizManager = QuizManager(databaseManager)
 
     embeddedServer(Netty, port = 8080) {
         routing {

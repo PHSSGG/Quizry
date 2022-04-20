@@ -4,7 +4,7 @@ import phss.quizry.config.Config
 import phss.quizry.config.provider.ConfigurationProvider
 
 const val DATABASE_FILE = "database"
-const val DATABASE_NAME = "Quizry"
+const val DATABASE_NAME = "quizry"
 
 class DatabaseConfig : ConfigurationProvider<DatabaseConfig>() {
 
