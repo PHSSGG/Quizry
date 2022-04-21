@@ -5,13 +5,14 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import phss.quizry.quiz.data.Quizzes
+import phss.quizry.user.data.domain.UserAccount
 
 class Quiz(id: EntityID<Int>) : IntEntity(id) {
 
     companion object : IntEntityClass<Quiz>(Quizzes)
 
     var category by Quizzes.category
-    var creator by Quizzes.creator
+    var creator by UserAccount referencedOn Quizzes.creator
     var title by Quizzes.title
     var description by Quizzes.description
     var questions by Quizzes.questions
