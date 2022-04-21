@@ -1,6 +1,7 @@
 package phss.quizry.user
 
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.transactions.transaction
 import phss.quizry.database.DatabaseManager
@@ -32,6 +33,7 @@ class UserManager(
     fun loadUserById(userId: Int) = loadUser { Accounts.id eq userId }
 
     private fun loadUser(query: SqlExpressionBuilder.() -> Op<Boolean>) = transaction {
+        SchemaUtils.create(Accounts)
         UserAccount.find(query).firstOrNull()
     }
 
