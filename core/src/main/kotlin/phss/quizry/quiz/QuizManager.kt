@@ -1,7 +1,5 @@
 package phss.quizry.quiz
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import phss.quizry.database.DatabaseManager
@@ -18,14 +16,16 @@ class QuizManager(
         Quiz.all().toList()
     }
 
-    fun createQuiz(category: String, creator: Int, title: String, description: String, questions: List<Quiz.QuizQuestion>, answers: List<Quiz.QuizAnswer>) = transaction {
+    fun loadQuizById(quizId: Int) = transaction { Quiz.findById(quizId) }
+
+    fun createQuiz(category: String, creator: Int, title: String, description: String, questions: String, answers: String) = transaction {
         Quiz.new {
             this.category = category
             this.creator = UserAccount[creator]
             this.title = title
             this.description = description
-            this.questions = Json.encodeToString(questions)
-            this.answers = Json.encodeToString(answers)
+            this.questions = questions
+            this.answers = answers
         }
     }
 
