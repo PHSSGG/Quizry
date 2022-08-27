@@ -15,5 +15,10 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:0.39.2")
     implementation("org.json:json:20220320")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("io.ktor:ktor-server-content-negotiation:2.1.0")
+    implementation("io.ktor:ktor-serialization-gson:2.1.0")
+    testImplementation("io.ktor:ktor-client-core:2.1.0")
+    testImplementation("io.ktor:ktor-client-cio:2.1.0")
+    testImplementation("io.ktor:ktor-client-content-negotiation:2.1.0")
     testImplementation("junit", "junit", "4.12")
 }

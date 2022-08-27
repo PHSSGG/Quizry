@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.transactions.transaction
 import phss.quizry.database.DatabaseManager
 import phss.quizry.user.data.Accounts
-import phss.quizry.user.data.domain.UserAccount
+import phss.quizry.user.data.domain.UserAccountEntity
 import phss.quizry.user.type.CredentialsCheckType
 
 class UserManager(
@@ -19,9 +19,11 @@ class UserManager(
     }
 
     fun createNewUser(username: String, password: String) = transaction {
-        UserAccount.new {
+        UserAccountEntity.new {
             this.username = username
             this.password = password
+            this.plays = 0L
+            this.coins = 0L
         }
     }
 
@@ -34,7 +36,7 @@ class UserManager(
 
     private fun loadUser(query: SqlExpressionBuilder.() -> Op<Boolean>) = transaction {
         SchemaUtils.create(Accounts)
-        UserAccount.find(query).firstOrNull()
+        UserAccountEntity.find(query).firstOrNull()
     }
 
 }

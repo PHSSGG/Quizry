@@ -5,6 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import phss.quizry.user.UserManager
+import phss.quizry.user.data.domain.UserAccount
 import phss.quizry.user.type.CredentialsCheckType
 
 fun Application.startUserService(userManager: UserManager) = routing {
@@ -15,7 +16,7 @@ fun Application.startUserService(userManager: UserManager) = routing {
         when (userManager.checkCredentials(username, password)) {
             CredentialsCheckType.INVALID_USERNAME -> call.respond(HttpStatusCode.NotFound)
             CredentialsCheckType.WRONG_PASSWORD -> call.respond(HttpStatusCode.Unauthorized)
-            else -> call.respond(HttpStatusCode.Accepted)
+            else -> call.respond(HttpStatusCode.Accepted, userManager.loadUserByUsername(username)!!.toUserAccount())
         }
     }
     post("/register") {
@@ -28,7 +29,7 @@ fun Application.startUserService(userManager: UserManager) = routing {
         }
 
         userManager.createNewUser(username, password)
-        call.respond(HttpStatusCode.Created)
+        call.respond(HttpStatusCode.Created, UserAccount(username, 0L, 0L))
     }
     post("/delete") {
         val username = call.request.queryParameters["username"] ?: return@post
@@ -46,13 +47,13 @@ fun Application.startUserService(userManager: UserManager) = routing {
 
         val user = userManager.loadUserByUsername(username)
         if (user == null) call.respond(HttpStatusCode.NotFound)
-        else call.respond(HttpStatusCode.OK)
+        else call.respond(HttpStatusCode.OK, user)
     }
     get("/getUserById") {
         val id = call.request.queryParameters["id"] ?: return@get
 
         val user = userManager.loadUserById(id.toInt())
         if (user == null) call.respond(HttpStatusCode.NotFound)
-        else call.respond(HttpStatusCode.OK)
+        else call.respond(HttpStatusCode.OK, user)
     }
 }

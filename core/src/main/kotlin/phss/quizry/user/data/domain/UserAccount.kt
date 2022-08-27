@@ -5,13 +5,22 @@ import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import phss.quizry.user.data.Accounts
 
-class UserAccount(id: EntityID<Int>) : IntEntity(id) {
+class UserAccountEntity(id: EntityID<Int>) : IntEntity(id) {
 
-    companion object : IntEntityClass<UserAccount>(Accounts)
+    companion object : IntEntityClass<UserAccountEntity>(Accounts)
 
     var username by Accounts.username
     var password by Accounts.password
     var plays by Accounts.plays
-    val coins by Accounts.coins
+    var coins by Accounts.coins
+
+    fun toUserAccount() = UserAccount(username, plays, coins)
 
 }
+
+@kotlinx.serialization.Serializable
+data class UserAccount(
+    val username: String,
+    val plays: Long,
+    val coins: Long
+)
